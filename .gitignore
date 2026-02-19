@@ -4,3 +4,7 @@
 # Track only these
 !.gitignore
 !CLAUDE.md
+!.claude/
+.claude/*
+!.claude/commands/
+!.claude/commands/*.md
