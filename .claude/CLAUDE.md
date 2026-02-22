@@ -50,6 +50,11 @@
 - Selina web UI: http://100.103.64.33:3000
 - EvermemOS location: /home/dyai/EverMemOS (MongoDB on port 27017, credentials: admin/memsys123)
 
+## Git & Project Setup
+
+- `.gitignore`: `dir/` blocks ALL children including negations — use `dir/*` + `!dir/allowed/` pattern instead
+- Skills universally useful across projects → create as global (`~/.claude/commands/`), not project-local
+
 ## Development Principles
 
 - Nothing is true until it runs. What doesn't work should fail visibly so we can fix it
