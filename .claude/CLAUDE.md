@@ -26,7 +26,9 @@
 
 - Vibe Kanban: https://kanban-jet-seven-ashy.vercel.app/ (Vercel deployment)
 - Active agents: Perr00bot, Marvin, OpenClaw
-- SSH: `ssh -i ~/.ssh/id_ed25519 root@srv1308064.hstgr.cloud`
+- SSH (root): `ssh -i ~/.ssh/id_ed25519 root@srv1308064.hstgr.cloud`
+- SSH (moltbot): `ssh moltbot@srv1308064.hstgr.cloud` (no key needed, default key works)
+- Resources: 8GB RAM, 96GB disk (Ubuntu 24.04, x86_64)
 - Git repo: /opt/agent-zero-data (remote: DYAI2025/agent-zero)
 - Memory sync cronjob: every 15min via /opt/agent-zero-data/scripts/memory-sync.sh
 
@@ -89,3 +91,5 @@
 **Goal:** Entlaste User durch intelligente Eigeninitiative. Positiv überraschen statt nachfragen.
 
 See `~/.claude/commands/decision-maker.md` for detailed framework and examples.
+
+@RTK.md
