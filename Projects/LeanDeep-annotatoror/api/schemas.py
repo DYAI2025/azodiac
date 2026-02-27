@@ -32,6 +32,19 @@ class MEMAMarker(BaseModel):
     clusters_required: List[str]
     dynamics_logic: str
 
+class DetectedMarker(BaseModel):
+    id: str
+    span: List[int]  # [start, end]
+    text: str
+    vad: Optional[VADWeights] = None
+
+class AnalysisResult(BaseModel):
+    text: str
+    atos: List[DetectedMarker] = Field(default_factory=list)
+    sems: List[DetectedMarker] = Field(default_factory=list)
+    clus: List[DetectedMarker] = Field(default_factory=list)
+    vad_score: VADWeights = Field(default_factory=VADWeights)
+
 class MarkerRegistry(BaseModel):
     atos: List[ATOSignal] = Field(default_factory=list)
     sems: List[SEMMarker] = Field(default_factory=list)
