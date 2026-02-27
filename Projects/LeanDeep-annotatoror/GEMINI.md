@@ -1,3 +1,10 @@
+# ⚠️ DEPRECATED DIRECTORY
+
+**STOP:** This directory is not the active codebase. 
+Please switch to: `/Users/benjaminpoersch/Projects/LeanDeep-annotator/`
+
+---
+
 # GEMINI.md — LeanDeep Annotator (Instructional Context)
 
 This document provides essential context and instructions for AI agents working within the LeanDeep Annotator project.
