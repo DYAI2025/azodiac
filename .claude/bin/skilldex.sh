@@ -67,13 +67,16 @@ if [[ "$cache_valid" == "false" ]]; then
     . + "\t" + $cat + "\t" + $sub
   ' "$RULES" | while IFS=$'\t' read -r kw cat sub; do
     # grep keyword against skill index, extract skill names
-    grep -i "$kw" "$skill_index" 2>/dev/null | cut -f1 | while read -r skill_name; do
+    matches=$(grep -i "$kw" "$skill_index" 2>/dev/null | cut -f1 || true)
+    [[ -z "$matches" ]] && continue
+    while read -r skill_name; do
+      [[ -z "$skill_name" ]] && continue
       # Skip if already handled by override
       if [[ -s "$matched_skills" ]] && grep -qx "$skill_name" "$matched_skills" 2>/dev/null; then
         continue
       fi
       printf '%s\t%s\t%s\n' "$cat" "$sub" "$skill_name" >> "$tmpfile"
-    done
+    done <<< "$matches"
   done
 
   # Step 4: Find unmatched skills
