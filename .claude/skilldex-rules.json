@@ -1,27 +1,27 @@
 {
-  "_meta": { "version": 1 },
-  "Planen": {
+  "_meta": { "version": 2 },
+  "Planning": {
     "subs": {
-      "Projektplanung": ["planning", "plan-writing", "project-development", "product-manager", "startup-business", "startup-metrics", "startup-financial", "kanban", "kaizen"],
-      "Architektur": ["architect", "architecture", "c4-", "ddd-", "domain-driven", "microservices", "monorepo", "software-architecture", "database-design", "event-sourcing", "cqrs", "saga-"],
+      "Project Planning": ["planning", "plan-writing", "project-development", "product-manager", "startup-business", "startup-metrics", "startup-financial", "kanban", "kaizen"],
+      "Architecture": ["architect", "architecture", "c4-", "ddd-", "domain-driven", "microservices", "monorepo", "software-architecture", "database-design", "event-sourcing", "cqrs", "saga-"],
       "Brainstorming": ["brainstorm", "design-orchestration", "design-md", "concise-planning", "writing-plans", "decision-maker"]
     }
   },
   "Code": {
     "subs": {
-      "Schreiben": ["-pro", "-expert", "development", "scaffold", "patterns", "best-practices", "mastery", "state-management", "nextjs-", "react-", "angular-", "django-", "fastapi-", "nestjs-", "laravel-", "flutter-", "swiftui-", "golang-", "rust-", "typescript-", "python-", "java-pro", "dotnet-", "ruby-", "elixir-", "haskell-", "scala-", "cpp-", "c-pro", "php-", "julia-", "kotlin-"],
+      "Writing": ["-pro", "-expert", "development", "scaffold", "patterns", "best-practices", "mastery", "state-management", "nextjs-", "react-", "angular-", "django-", "fastapi-", "nestjs-", "laravel-", "flutter-", "swiftui-", "golang-", "rust-", "typescript-", "python-", "java-pro", "dotnet-", "ruby-", "elixir-", "haskell-", "scala-", "cpp-", "c-pro", "php-", "julia-", "kotlin-"],
       "Review": ["review", "audit", "lint", "refactor", "clean-code", "code-review", "simplify", "tech-debt", "codebase-cleanup", "code-refactoring"],
       "Debugging": ["debug", "error-", "fix", "incident-response", "troubleshoot", "find-bugs", "error-detective", "systematic-debugging", "diagnostics"]
     }
   },
-  "Testen": {
+  "Testing": {
     "subs": {
       "Unit & E2E": ["test-driven", "tdd-", "unit-testing", "e2e-testing", "testing-patterns", "playwright", "jest", "bats-", "webapp-testing", "test-automator", "test-fixing"],
       "Performance": ["performance-", "benchmark", "profiling", "optimization", "bottleneck", "load-"],
-      "Security-Tests": ["security-scanning", "sast-", "pentest-", "vulnerability-", "penetration", "burp-", "sqlmap-", "ffuf-", "api-fuzzing"]
+      "Security Tests": ["security-scanning", "sast-", "pentest-", "vulnerability-", "penetration", "burp-", "sqlmap-", "ffuf-", "api-fuzzing"]
     }
   },
-  "Deployen": {
+  "Deploy": {
     "subs": {
       "CI/CD": ["cicd-", "github-actions", "gitlab-ci", "circleci-", "deployment-pipeline", "deployment-validation", "gitops-", "vercel-deploy"],
       "Cloud": ["aws-", "gcp-", "azure-", "cloud-architect", "terraform-", "cloudformation-", "cdk-", "serverless", "render-automation"],
@@ -35,9 +35,9 @@
       "Hardening": ["security-hardening", "secrets-management", "mtls-", "api-security", "memory-safety", "anti-reversing", "wcag-", "accessibility-"]
     }
   },
-  "Automatisieren": {
+  "Automation": {
     "subs": {
-      "SaaS-Tools": ["slack-automation", "gmail-automation", "notion-automation", "jira-automation", "hubspot-", "salesforce-", "shopify-", "stripe-", "github-automation", "linear-automation", "asana-", "trello-", "clickup-", "monday-", "confluence-", "zendesk-", "intercom-", "freshdesk-", "pagerduty-", "sentry-", "datadog-", "posthog-", "mixpanel-", "amplitude-", "segment-", "zapier-", "make-automation", "n8n-", "airtable-", "coda-", "miro-", "figma-", "canva-", "todoist-", "calendly-", "zoom-", "discord-automation", "telegram-automation", "whatsapp-automation", "instagram-automation", "youtube-automation", "twitter-automation", "reddit-automation", "linkedin-automation", "mailchimp-", "sendgrid-", "brevo-", "activecampaign-", "klaviyo-", "convertkit-", "docusign-", "box-automation", "dropbox-automation", "google-drive-", "google-calendar-", "google-analytics-", "outlook-", "one-drive-", "microsoft-teams-", "pipedrive-", "close-automation", "zoho-", "square-", "paypal-", "bamboohr-", "freshservice-", "wrike-", "basecamp-", "bitbucket-", "webflow-"],
+      "SaaS Tools": ["slack-automation", "gmail-automation", "notion-automation", "jira-automation", "hubspot-", "salesforce-", "shopify-", "stripe-", "github-automation", "linear-automation", "asana-", "trello-", "clickup-", "monday-", "confluence-", "zendesk-", "intercom-", "freshdesk-", "pagerduty-", "sentry-", "datadog-", "posthog-", "mixpanel-", "amplitude-", "segment-", "zapier-", "make-automation", "n8n-", "airtable-", "coda-", "miro-", "figma-", "canva-", "todoist-", "calendly-", "zoom-", "discord-automation", "telegram-automation", "whatsapp-automation", "instagram-automation", "youtube-automation", "twitter-automation", "reddit-automation", "linkedin-automation", "mailchimp-", "sendgrid-", "brevo-", "activecampaign-", "klaviyo-", "convertkit-", "docusign-", "box-automation", "dropbox-automation", "google-drive-", "google-calendar-", "google-analytics-", "outlook-", "one-drive-", "microsoft-teams-", "pipedrive-", "close-automation", "zoho-", "square-", "paypal-", "bamboohr-", "freshservice-", "wrike-", "basecamp-", "bitbucket-", "webflow-"],
       "Workflows": ["workflow-", "inngest", "trigger-dev", "temporal-", "bullmq-", "airflow-", "conductor-", "orchestration"],
       "Bots": ["slack-bot", "telegram-bot", "discord-bot", "browser-automation", "chrome-extension", "apify-"]
     }
@@ -49,21 +49,21 @@
       "SEO": ["seo-", "programmatic-seo", "schema-markup", "app-store-optimization"]
     }
   },
-  "Daten": {
+  "Data": {
     "subs": {
-      "Datenbanken": ["database-", "postgresql", "postgres-", "nosql-", "sql-", "prisma-", "drizzle-", "mongodb", "redis-", "cosmos-", "supabase-", "neon-", "firebase"],
+      "Databases": ["database-", "postgresql", "postgres-", "nosql-", "sql-", "prisma-", "drizzle-", "mongodb", "redis-", "cosmos-", "supabase-", "neon-", "firebase"],
       "Pipelines": ["data-engineer", "data-engineering-", "data-quality-", "dbt-", "spark-", "airflow-", "etl", "data-pipeline"],
       "ML & AI": ["ml-", "machine-learning", "ai-engineer", "ai-agent", "llm-", "rag-", "embedding-", "vector-", "computer-vision", "prompt-engineering", "prompt-caching", "evaluation", "langchain-", "langgraph", "crewai"]
     }
   },
-  "Recherche": {
+  "Research": {
     "subs": {
-      "Analyse": ["business-analyst", "startup-analyst", "market-sizing", "risk-manager", "risk-metrics", "quant-analyst", "culture-index", "team-composition", "kpi-dashboard"],
+      "Analysis": ["business-analyst", "startup-analyst", "market-sizing", "risk-manager", "risk-metrics", "quant-analyst", "culture-index", "team-composition", "kpi-dashboard"],
       "Deep Research": ["deep-research", "research-engineer", "exa-search", "tavily-", "firecrawl-", "context7-", "claude-speed-reader", "reference-builder"],
       "Docs": ["api-documenter", "api-documentation", "openapi-spec", "code-documentation", "changelog-", "architecture-decision-records", "postmortem-writing"]
     }
   },
-  "Agenten": {
+  "Agents": {
     "subs": {
       "Multi-Agent": ["multi-agent", "agent-orchestration", "autonomous-agent", "ai-agents-architect", "agent-manager", "dispatching-parallel", "subagent-", "swarm", "hive-mind", "claude-flow"],
       "Swarm": ["swarm-", "coordination", "topology-", "load-balance"],

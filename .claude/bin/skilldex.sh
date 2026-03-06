@@ -85,7 +85,7 @@ if [[ "$cache_valid" == "false" ]]; then
   uncategorized=$(comm -23 <(echo "$all_skills") <(echo "$categorized"))
   while read -r skill_name; do
     [[ -z "$skill_name" ]] && continue
-    printf '%s\t%s\t%s\n' "Andere" "Unsortiert" "$skill_name" >> "$tmpfile"
+    printf '%s\t%s\t%s\n' "Other" "Uncategorized" "$skill_name" >> "$tmpfile"
   done <<< "$uncategorized"
 
   # Deduplicate and sort
@@ -98,14 +98,14 @@ fi
 selection=$(tail -n +2 "$CACHE" \
   | awk -F'\t' '{printf "%s > %s > %s\n", $1, $2, $3}' \
   | fzf \
-      --header="Skilldex | Tippen zum Suchen | Enter = Skill laden | Esc = Abbrechen" \
+      --header="Skilldex | Type to search | Enter = Load skill | Esc = Cancel" \
       --preview="cat $SKILLS_DIR/{3}/SKILL.md 2>/dev/null | head -50" \
       --preview-window=right:50%:wrap \
       --delimiter=" > " \
       --no-multi \
       --layout=reverse \
       --border \
-      --prompt="Skill suchen: " \
+      --prompt="Find skill: " \
   || true)
 
 if [[ -n "$selection" ]]; then
