@@ -1,0 +1,73 @@
+{
+  "_meta": { "version": 1 },
+  "Planen": {
+    "subs": {
+      "Projektplanung": ["planning", "plan-writing", "project-development", "product-manager", "startup-business", "startup-metrics", "startup-financial", "kanban", "kaizen"],
+      "Architektur": ["architect", "architecture", "c4-", "ddd-", "domain-driven", "microservices", "monorepo", "software-architecture", "database-design", "event-sourcing", "cqrs", "saga-"],
+      "Brainstorming": ["brainstorm", "design-orchestration", "design-md", "concise-planning", "writing-plans", "decision-maker"]
+    }
+  },
+  "Code": {
+    "subs": {
+      "Schreiben": ["-pro", "-expert", "development", "scaffold", "patterns", "best-practices", "mastery", "state-management", "nextjs-", "react-", "angular-", "django-", "fastapi-", "nestjs-", "laravel-", "flutter-", "swiftui-", "golang-", "rust-", "typescript-", "python-", "java-pro", "dotnet-", "ruby-", "elixir-", "haskell-", "scala-", "cpp-", "c-pro", "php-", "julia-", "kotlin-"],
+      "Review": ["review", "audit", "lint", "refactor", "clean-code", "code-review", "simplify", "tech-debt", "codebase-cleanup", "code-refactoring"],
+      "Debugging": ["debug", "error-", "fix", "incident-response", "troubleshoot", "find-bugs", "error-detective", "systematic-debugging", "diagnostics"]
+    }
+  },
+  "Testen": {
+    "subs": {
+      "Unit & E2E": ["test-driven", "tdd-", "unit-testing", "e2e-testing", "testing-patterns", "playwright", "jest", "bats-", "webapp-testing", "test-automator", "test-fixing"],
+      "Performance": ["performance-", "benchmark", "profiling", "optimization", "bottleneck", "load-"],
+      "Security-Tests": ["security-scanning", "sast-", "pentest-", "vulnerability-", "penetration", "burp-", "sqlmap-", "ffuf-", "api-fuzzing"]
+    }
+  },
+  "Deployen": {
+    "subs": {
+      "CI/CD": ["cicd-", "github-actions", "gitlab-ci", "circleci-", "deployment-pipeline", "deployment-validation", "gitops-", "vercel-deploy"],
+      "Cloud": ["aws-", "gcp-", "azure-", "cloud-architect", "terraform-", "cloudformation-", "cdk-", "serverless", "render-automation"],
+      "Container": ["docker-", "kubernetes-", "k8s-", "helm-", "container", "istio-", "linkerd-", "service-mesh"]
+    }
+  },
+  "Security": {
+    "subs": {
+      "Audit": ["security-audit", "security-compliance", "security-requirement", "threat-model", "stride-", "attack-tree", "pci-compliance", "gdpr-", "security-bluebook"],
+      "Pentest": ["pentest-", "red-team", "ethical-hacking", "exploit", "privilege-escalation", "xss-", "sql-injection", "ssh-penetration", "smtp-penetration", "wordpress-penetration", "cloud-penetration", "idor-", "broken-authentication", "shodan-", "metasploit", "scanning-tools"],
+      "Hardening": ["security-hardening", "secrets-management", "mtls-", "api-security", "memory-safety", "anti-reversing", "wcag-", "accessibility-"]
+    }
+  },
+  "Automatisieren": {
+    "subs": {
+      "SaaS-Tools": ["slack-automation", "gmail-automation", "notion-automation", "jira-automation", "hubspot-", "salesforce-", "shopify-", "stripe-", "github-automation", "linear-automation", "asana-", "trello-", "clickup-", "monday-", "confluence-", "zendesk-", "intercom-", "freshdesk-", "pagerduty-", "sentry-", "datadog-", "posthog-", "mixpanel-", "amplitude-", "segment-", "zapier-", "make-automation", "n8n-", "airtable-", "coda-", "miro-", "figma-", "canva-", "todoist-", "calendly-", "zoom-", "discord-automation", "telegram-automation", "whatsapp-automation", "instagram-automation", "youtube-automation", "twitter-automation", "reddit-automation", "linkedin-automation", "mailchimp-", "sendgrid-", "brevo-", "activecampaign-", "klaviyo-", "convertkit-", "docusign-", "box-automation", "dropbox-automation", "google-drive-", "google-calendar-", "google-analytics-", "outlook-", "one-drive-", "microsoft-teams-", "pipedrive-", "close-automation", "zoho-", "square-", "paypal-", "bamboohr-", "freshservice-", "wrike-", "basecamp-", "bitbucket-", "webflow-"],
+      "Workflows": ["workflow-", "inngest", "trigger-dev", "temporal-", "bullmq-", "airflow-", "conductor-", "orchestration"],
+      "Bots": ["slack-bot", "telegram-bot", "discord-bot", "browser-automation", "chrome-extension", "apify-"]
+    }
+  },
+  "Content": {
+    "subs": {
+      "Writing": ["copywriting", "copy-editing", "content-creator", "content-marketer", "beautiful-prose", "writing-skills", "documentation-", "readme", "docs-architect", "wiki-", "tutorial-", "podcast-", "data-storytelling", "professional-proofreader"],
+      "Marketing": ["marketing-", "ads-", "paid-ads", "launch-strategy", "viral-", "social-content", "email-sequence", "pricing-strategy", "free-tool-strategy", "referral-", "competitive-landscape", "competitor-", "brand-guidelines", "micro-saas"],
+      "SEO": ["seo-", "programmatic-seo", "schema-markup", "app-store-optimization"]
+    }
+  },
+  "Daten": {
+    "subs": {
+      "Datenbanken": ["database-", "postgresql", "postgres-", "nosql-", "sql-", "prisma-", "drizzle-", "mongodb", "redis-", "cosmos-", "supabase-", "neon-", "firebase"],
+      "Pipelines": ["data-engineer", "data-engineering-", "data-quality-", "dbt-", "spark-", "airflow-", "etl", "data-pipeline"],
+      "ML & AI": ["ml-", "machine-learning", "ai-engineer", "ai-agent", "llm-", "rag-", "embedding-", "vector-", "computer-vision", "prompt-engineering", "prompt-caching", "evaluation", "langchain-", "langgraph", "crewai"]
+    }
+  },
+  "Recherche": {
+    "subs": {
+      "Analyse": ["business-analyst", "startup-analyst", "market-sizing", "risk-manager", "risk-metrics", "quant-analyst", "culture-index", "team-composition", "kpi-dashboard"],
+      "Deep Research": ["deep-research", "research-engineer", "exa-search", "tavily-", "firecrawl-", "context7-", "claude-speed-reader", "reference-builder"],
+      "Docs": ["api-documenter", "api-documentation", "openapi-spec", "code-documentation", "changelog-", "architecture-decision-records", "postmortem-writing"]
+    }
+  },
+  "Agenten": {
+    "subs": {
+      "Multi-Agent": ["multi-agent", "agent-orchestration", "autonomous-agent", "ai-agents-architect", "agent-manager", "dispatching-parallel", "subagent-", "swarm", "hive-mind", "claude-flow"],
+      "Swarm": ["swarm-", "coordination", "topology-", "load-balance"],
+      "Memory": ["agent-memory", "memory-systems", "conversation-memory", "hierarchical-agent-memory", "context-management", "context-window", "context-optimization"]
+    }
+  }
+}

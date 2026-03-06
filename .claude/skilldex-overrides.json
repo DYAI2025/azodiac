@@ -1,0 +1,5 @@
+{
+  "_comment": "Manual overrides: skill-name -> [[category, sub], ...]. Overrides keyword matching.",
+  "clean-code": [["Code", "Review"]],
+  "antigravity-workflows": [["Agenten", "Multi-Agent"], ["Automatisieren", "Workflows"]]
+}
