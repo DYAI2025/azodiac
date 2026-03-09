@@ -26,15 +26,13 @@ A curated collection of Claude Code skill repositories, plugin ecosystems, and r
 | `OneContext-main/` | Context management tool |
 | `UnseveredMemory/` | Persistent AI memory framework |
 | `claude2/` | Page design project (shaders/WebGL) |
+| `Claude-Ads/` | Ads audit and optimization skills |
+| `jcodemunch-mcp/` | MCP server for code compression/analysis |
+| `Uncodixfy/` | Skill for reversing minified/obfuscated code |
 
 ## Git Tracking
 
-The `.gitignore` uses a deny-all-then-allow pattern — only these paths are tracked:
-
-- `CLAUDE.md` (this file)
-- `.claude/commands/*.md` (shared slash commands)
-
-Everything else (all subdirectory projects) is untracked. Each subdirectory is a standalone clone.
+Only `CLAUDE.md` is tracked by git. Everything else (all subdirectory projects, `.claude/` contents) is untracked. Each subdirectory is a standalone clone.
 
 ## Working With This Repo
 
@@ -44,17 +42,9 @@ Everything else (all subdirectory projects) is untracked. Each subdirectory is a
 - `.claude/homunculus/` contains observation logs (`observations.jsonl`) and learned instincts (`instincts/pending/`)
 - To install a Claude Code plugin: `/plugin marketplace add <org>/<name>` then `/plugin install <plugin>@<marketplace>`
 
-## Key Skill Installation Patterns
+## Root-Level Scripts
 
-```bash
-# Superpowers
-/plugin marketplace add obra/superpowers-marketplace
-/plugin install superpowers@superpowers-marketplace
-
-# Homunculus
-/plugin marketplace add humanplane/homunculus
-/plugin install homunculus@homunculus
-```
+- `vps-cleanup.sh` — VPS process cleanup and maintenance script
 
 ## RTK (CLI-tokenreducter-master)
 
