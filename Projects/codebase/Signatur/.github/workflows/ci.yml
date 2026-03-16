@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'fusion_ring_website/nextjs_space/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'fusion_ring_website/nextjs_space/**'
+
+defaults:
+  run:
+    working-directory: fusion_ring_website/nextjs_space
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: fusion_ring_website/nextjs_space/package-lock.json
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+  validate-openapi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate OpenAPI spec
+        uses: char0n/swagger-editor-validate@v1
+        with:
+          definition-file: fusion_ring_website/nextjs_space/docs/openapi.yaml

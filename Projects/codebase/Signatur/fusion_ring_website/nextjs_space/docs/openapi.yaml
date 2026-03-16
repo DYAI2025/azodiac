@@ -1,0 +1,291 @@
+openapi: 3.0.3
+info:
+  title: Signatur BAFE Proxy API
+  version: 1.0.0
+  description: |
+    Proxy API for the FuFirE (Fusion Firmament Engine) BAFE astrology calculation service.
+
+    All endpoints accept birth data and return astrological calculations used to generate
+    the Fusion Ring visualization profile.
+
+servers:
+  - url: http://localhost:3000
+    description: Local development
+  - url: https://bafe-production.up.railway.app
+    description: BAFE upstream (direct)
+
+paths:
+  /api/calculate/bazi:
+    post:
+      summary: BaZi Four Pillars calculation
+      description: Calculates the Four Pillars of Destiny from birth data. Returns heavenly stems, earthly branches, animals, and elements for year/month/day/hour pillars.
+      operationId: calculateBazi
+      tags: [Astrology]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BirthInput'
+      responses:
+        '200':
+          description: BaZi calculation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaziResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '502':
+          $ref: '#/components/responses/UpstreamError'
+
+  /api/calculate/western:
+    post:
+      summary: Western astrology calculation
+      description: Calculates planetary positions, house cusps, and angles (Ascendant, MC) from birth data.
+      operationId: calculateWestern
+      tags: [Astrology]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BirthInput'
+      responses:
+        '200':
+          description: Western astrology result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WesternResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '502':
+          $ref: '#/components/responses/UpstreamError'
+
+  /api/calculate/wuxing:
+    post:
+      summary: Wu Xing Five Elements calculation
+      description: Calculates the Five Elements (Wood, Fire, Earth, Metal, Water) strength vector and dominant element from birth data.
+      operationId: calculateWuxing
+      tags: [Astrology]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BirthInput'
+      responses:
+        '200':
+          description: Wu Xing calculation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WuxingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '502':
+          $ref: '#/components/responses/UpstreamError'
+
+  /api/calculate/fusion:
+    post:
+      summary: Fusion interpretation
+      description: Generates a textual fusion interpretation combining Western and BaZi astrology.
+      operationId: calculateFusion
+      tags: [Astrology]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BirthInput'
+      responses:
+        '200':
+          description: Fusion interpretation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  theme:
+                    type: string
+                  summary:
+                    type: string
+        '502':
+          $ref: '#/components/responses/UpstreamError'
+
+  /api/calculate/tst:
+    post:
+      summary: Transit State calculation
+      description: Calculates current transit state for the given birth data.
+      operationId: calculateTst
+      tags: [Astrology]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BirthInput'
+      responses:
+        '200':
+          description: Transit state data
+          content:
+            application/json:
+              schema:
+                type: object
+        '502':
+          $ref: '#/components/responses/UpstreamError'
+
+components:
+  schemas:
+    BirthInput:
+      type: object
+      required: [date, tz, lon, lat]
+      properties:
+        date:
+          type: string
+          description: ISO 8601 local datetime
+          example: "1990-06-15T14:30:00"
+        tz:
+          type: string
+          description: IANA timezone identifier
+          example: "Europe/Berlin"
+        lon:
+          type: number
+          minimum: -180
+          maximum: 180
+          description: Longitude in degrees
+          example: 13.405
+        lat:
+          type: number
+          minimum: -90
+          maximum: 90
+          description: Latitude in degrees
+          example: 52.52
+
+    BaziPillar:
+      type: object
+      properties:
+        stamm:
+          type: string
+          description: Heavenly Stem (German key)
+        zweig:
+          type: string
+          description: Earthly Branch (German key)
+        tier:
+          type: string
+          description: Chinese zodiac animal (German key)
+        element:
+          type: string
+          description: Associated element
+
+    BaziResponse:
+      type: object
+      properties:
+        pillars:
+          type: object
+          properties:
+            year:
+              $ref: '#/components/schemas/BaziPillar'
+            month:
+              $ref: '#/components/schemas/BaziPillar'
+            day:
+              $ref: '#/components/schemas/BaziPillar'
+            hour:
+              $ref: '#/components/schemas/BaziPillar'
+        chinese:
+          type: object
+          properties:
+            day_master:
+              type: string
+            year:
+              type: object
+              properties:
+                animal:
+                  type: string
+
+    PlanetaryBody:
+      type: object
+      properties:
+        zodiac_sign:
+          type: integer
+          minimum: 0
+          maximum: 11
+          description: Zero-based zodiac sign index
+        longitude:
+          type: number
+          description: Ecliptic longitude in degrees
+        speed:
+          type: number
+          description: Daily motion in degrees
+
+    WesternResponse:
+      type: object
+      properties:
+        bodies:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/PlanetaryBody'
+        angles:
+          type: object
+          properties:
+            Ascendant:
+              type: number
+              description: Ascendant degree
+            MC:
+              type: number
+              description: Midheaven degree
+        houses:
+          type: object
+          additionalProperties:
+            type: number
+          description: House cusp degrees keyed by house number
+
+    WuxingResponse:
+      type: object
+      properties:
+        wu_xing_vector:
+          type: object
+          properties:
+            Holz:
+              type: number
+              description: Wood element strength
+            Feuer:
+              type: number
+              description: Fire element strength
+            Erde:
+              type: number
+              description: Earth element strength
+            Metall:
+              type: number
+              description: Metal element strength
+            Wasser:
+              type: number
+              description: Water element strength
+        dominant_element:
+          type: string
+          description: Name of the dominant element
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        status:
+          type: integer
+          description: HTTP status code from upstream
+
+  responses:
+    BadRequest:
+      description: Invalid endpoint or request body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    UpstreamError:
+      description: BAFE upstream error or connection failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
