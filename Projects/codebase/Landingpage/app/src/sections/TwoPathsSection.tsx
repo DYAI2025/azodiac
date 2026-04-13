@@ -1,17 +1,20 @@
-import React, { useRef, useLayoutEffect } from 'react';
+import React, { useMemo, useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SunRing, OrnateDivider } from '../components/SunIcon';
 import { User, Users } from 'lucide-react';
+import { getPathButtonCopy, type ExperimentVariant } from '../utils/experiments';
 
 gsap.registerPlugin(ScrollTrigger);
 
 interface TwoPathsSectionProps {
   onSelectPath: (path: 'character' | 'partnership') => void;
+  experimentVariant: ExperimentVariant;
 }
 
-export const TwoPathsSection: React.FC<TwoPathsSectionProps> = ({ onSelectPath }) => {
+export const TwoPathsSection: React.FC<TwoPathsSectionProps> = ({ onSelectPath, experimentVariant }) => {
   const sectionRef = useRef<HTMLElement>(null);
+  const buttonCopy = useMemo(() => getPathButtonCopy(experimentVariant), [experimentVariant]);
   const sealRef = useRef<HTMLDivElement>(null);
   const sealLabelRef = useRef<HTMLDivElement>(null);
   const leftCardRef = useRef<HTMLDivElement>(null);
@@ -21,6 +24,9 @@ export const TwoPathsSection: React.FC<TwoPathsSectionProps> = ({ onSelectPath }
   useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
 
     const ctx = gsap.context(() => {
       const scrollTl = gsap.timeline({
@@ -132,7 +138,7 @@ export const TwoPathsSection: React.FC<TwoPathsSectionProps> = ({ onSelectPath }
         <div className="bg-white/80 backdrop-blur-sm rounded-sm p-6 md:p-8 shadow-sm hover:shadow-md transition-shadow duration-300 group">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-full bg-[#C8A14A]/10 flex items-center justify-center">
-              <User className="w-5 h-5 text-[#C8A14A]" />
+              <User aria-hidden="true" className="w-5 h-5 text-[#C8A14A]" />
             </div>
             <h3 className="text-xl md:text-2xl text-[#14181F]">Character Portrait</h3>
           </div>
@@ -142,10 +148,11 @@ export const TwoPathsSection: React.FC<TwoPathsSectionProps> = ({ onSelectPath }
           </p>
           
           <button
+            type="button"
             onClick={() => onSelectPath('character')}
-            className="w-full py-3 px-4 border border-[#053B3F] text-[#053B3F] rounded-sm text-sm font-medium hover:bg-[#053B3F] hover:text-[#F4EFE6] transition-all duration-300"
+            className="w-full py-3 px-4 border border-[#053B3F] text-[#053B3F] rounded-sm text-sm font-medium hover:bg-[#053B3F] hover:text-[#F4EFE6] transition-[background-color,color,box-shadow] duration-300"
           >
-            Start Single Reading
+            {buttonCopy.single}
           </button>
         </div>
       </div>
@@ -166,7 +173,7 @@ export const TwoPathsSection: React.FC<TwoPathsSectionProps> = ({ onSelectPath }
         <div className="bg-white/80 backdrop-blur-sm rounded-sm p-6 md:p-8 shadow-sm hover:shadow-md transition-shadow duration-300 group">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-full bg-[#C8A14A]/10 flex items-center justify-center">
-              <Users className="w-5 h-5 text-[#C8A14A]" />
+              <Users aria-hidden="true" className="w-5 h-5 text-[#C8A14A]" />
             </div>
             <h3 className="text-xl md:text-2xl text-[#14181F]">Partnership</h3>
           </div>
@@ -176,10 +183,11 @@ export const TwoPathsSection: React.FC<TwoPathsSectionProps> = ({ onSelectPath }
           </p>
           
           <button
+            type="button"
             onClick={() => onSelectPath('partnership')}
-            className="w-full py-3 px-4 border border-[#053B3F] text-[#053B3F] rounded-sm text-sm font-medium hover:bg-[#053B3F] hover:text-[#F4EFE6] transition-all duration-300"
+            className="w-full py-3 px-4 border border-[#053B3F] text-[#053B3F] rounded-sm text-sm font-medium hover:bg-[#053B3F] hover:text-[#F4EFE6] transition-[background-color,color,box-shadow] duration-300"
           >
-            Start Partner Reading
+            {buttonCopy.partner}
           </button>
         </div>
       </div>

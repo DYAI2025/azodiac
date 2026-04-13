@@ -43,6 +43,9 @@ export const InputSection: React.FC<InputSectionProps> = ({ pathType, onCalculat
     const section = sectionRef.current;
     if (!section) return;
 
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
     const ctx = gsap.context(() => {
       const scrollTl = gsap.timeline({
         scrollTrigger: {
@@ -136,6 +139,8 @@ export const InputSection: React.FC<InputSectionProps> = ({ pathType, onCalculat
           <img
             src={panelImage.desktop}
             alt={panelImage.alt}
+            width={1920}
+            height={1280}
             loading="lazy"
             decoding="async"
             className="w-full h-full object-cover"
@@ -175,26 +180,32 @@ export const InputSection: React.FC<InputSectionProps> = ({ pathType, onCalculat
             {/* Birth Date & Time */}
             <div className="space-y-4">
               <div>
-                <label className="block font-mono text-xs uppercase tracking-[0.12em] text-[#6D6A61] mb-2">
+                <label htmlFor="birth-date" className="block font-mono text-xs uppercase tracking-[0.12em] text-[#6D6A61] mb-2">
                   Birth Date
                 </label>
                 <input
+                  id="birth-date"
+                  name="birthDate"
+                  autoComplete="off"
                   type="date"
                   value={birthDate}
                   onChange={(e) => setBirthDate(e.target.value)}
-                  className="w-full px-4 py-3 bg-[#F4EFE6] border border-[#E5DDD1] rounded-sm text-[#14181F] focus:outline-none focus:border-[#C8A14A] transition-colors"
+                  className="w-full px-4 py-3 bg-[#F4EFE6] border border-[#E5DDD1] rounded-sm text-[#14181F] focus-visible:border-[#C8A14A] focus-visible:ring-2 focus-visible:ring-[#C8A14A]/30 transition-colors"
                 />
               </div>
               
               <div>
-                <label className="block font-mono text-xs uppercase tracking-[0.12em] text-[#6D6A61] mb-2">
+                <label htmlFor="birth-time" className="block font-mono text-xs uppercase tracking-[0.12em] text-[#6D6A61] mb-2">
                   Birth Time <span className="text-[#6D6A61]/60">(optional)</span>
                 </label>
                 <input
+                  id="birth-time"
+                  name="birthTime"
+                  autoComplete="off"
                   type="time"
                   value={birthTime}
                   onChange={(e) => setBirthTime(e.target.value)}
-                  className="w-full px-4 py-3 bg-[#F4EFE6] border border-[#E5DDD1] rounded-sm text-[#14181F] focus:outline-none focus:border-[#C8A14A] transition-colors"
+                  className="w-full px-4 py-3 bg-[#F4EFE6] border border-[#E5DDD1] rounded-sm text-[#14181F] focus-visible:border-[#C8A14A] focus-visible:ring-2 focus-visible:ring-[#C8A14A]/30 transition-colors"
                 />
               </div>
 
@@ -202,26 +213,32 @@ export const InputSection: React.FC<InputSectionProps> = ({ pathType, onCalculat
               {pathType === 'partnership' && (
                 <>
                   <div className="pt-4 border-t border-[#E5DDD1]">
-                    <label className="block font-mono text-xs uppercase tracking-[0.12em] text-[#6D6A61] mb-2">
+                    <label htmlFor="partner-birth-date" className="block font-mono text-xs uppercase tracking-[0.12em] text-[#6D6A61] mb-2">
                       Partner's Birth Date
                     </label>
                     <input
+                      id="partner-birth-date"
+                      name="partnerBirthDate"
+                      autoComplete="off"
                       type="date"
                       value={partnerDate}
                       onChange={(e) => setPartnerDate(e.target.value)}
-                      className="w-full px-4 py-3 bg-[#F4EFE6] border border-[#E5DDD1] rounded-sm text-[#14181F] focus:outline-none focus:border-[#C8A14A] transition-colors"
+                      className="w-full px-4 py-3 bg-[#F4EFE6] border border-[#E5DDD1] rounded-sm text-[#14181F] focus-visible:border-[#C8A14A] focus-visible:ring-2 focus-visible:ring-[#C8A14A]/30 transition-colors"
                     />
                   </div>
                   
                   <div>
-                    <label className="block font-mono text-xs uppercase tracking-[0.12em] text-[#6D6A61] mb-2">
+                    <label htmlFor="partner-birth-time" className="block font-mono text-xs uppercase tracking-[0.12em] text-[#6D6A61] mb-2">
                       Partner's Birth Time <span className="text-[#6D6A61]/60">(optional)</span>
                     </label>
                     <input
+                      id="partner-birth-time"
+                      name="partnerBirthTime"
+                      autoComplete="off"
                       type="time"
                       value={partnerTime}
                       onChange={(e) => setPartnerTime(e.target.value)}
-                      className="w-full px-4 py-3 bg-[#F4EFE6] border border-[#E5DDD1] rounded-sm text-[#14181F] focus:outline-none focus:border-[#C8A14A] transition-colors"
+                      className="w-full px-4 py-3 bg-[#F4EFE6] border border-[#E5DDD1] rounded-sm text-[#14181F] focus-visible:border-[#C8A14A] focus-visible:ring-2 focus-visible:ring-[#C8A14A]/30 transition-colors"
                     />
                   </div>
                 </>
@@ -231,9 +248,10 @@ export const InputSection: React.FC<InputSectionProps> = ({ pathType, onCalculat
 
           {/* CTA Button */}
           <button
+            type="button"
             onClick={handleCalculate}
             disabled={!isValid}
-            className="mt-6 w-full md:w-auto px-8 py-4 bg-[#053B3F] text-[#F4EFE6] rounded-sm font-medium text-sm tracking-wide hover:bg-[#0A4A4E] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:-translate-y-0.5 hover:shadow-lg"
+            className="mt-6 w-full md:w-auto px-8 py-4 bg-[#053B3F] text-[#F4EFE6] rounded-sm font-medium text-sm tracking-wide hover:bg-[#0A4A4E] transition-[background-color,transform,box-shadow,opacity] duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:-translate-y-0.5 hover:shadow-lg"
           >
             {pathType === 'partnership' ? 'Calculate our compatibility' : 'Calculate my portrait'}
           </button>
@@ -245,7 +263,7 @@ export const InputSection: React.FC<InputSectionProps> = ({ pathType, onCalculat
             aria-expanded={showTimeInfo}
             className="mt-4 flex items-center gap-2 text-sm text-[#6D6A61] hover:text-[#C8A14A] transition-colors"
           >
-            <Info className="w-4 h-4" />
+            <Info aria-hidden="true" className="w-4 h-4" />
             Why we ask for time
           </button>
 

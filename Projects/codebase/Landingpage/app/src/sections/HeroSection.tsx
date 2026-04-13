@@ -1,17 +1,20 @@
-import React, { useRef, useLayoutEffect } from 'react';
+import React, { useMemo, useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SunIcon, SunRing } from '../components/SunIcon';
 import { ChevronDown } from 'lucide-react';
+import { getHeroCopy, type ExperimentVariant } from '../utils/experiments';
 
 gsap.registerPlugin(ScrollTrigger);
 
 interface HeroSectionProps {
   onBegin: () => void;
+  experimentVariant: ExperimentVariant;
 }
 
-export const HeroSection: React.FC<HeroSectionProps> = ({ onBegin }) => {
+export const HeroSection: React.FC<HeroSectionProps> = ({ onBegin, experimentVariant }) => {
   const sectionRef = useRef<HTMLElement>(null);
+  const heroCopy = useMemo(() => getHeroCopy(experimentVariant), [experimentVariant]);
   const ringRef = useRef<HTMLDivElement>(null);
   const sunRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLDivElement>(null);
@@ -22,6 +25,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onBegin }) => {
   useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
 
     const ctx = gsap.context(() => {
       // Auto-play entrance animation on load
@@ -138,14 +144,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onBegin }) => {
       {/* Headline */}
       <h1
         ref={headlineRef}
-        className="absolute left-1/2 top-[42%] md:top-[52%] -translate-x-1/2 -translate-y-1/2 text-center px-4"
+        className="absolute left-1/2 top-[42%] md:top-[52%] -translate-x-1/2 -translate-y-1/2 text-center px-4 text-balance"
       >
-        <span className="block text-[clamp(36px,6vw,76px)] leading-[0.95] tracking-[-0.01em] text-[#14181F]">
+        <span className="block text-[clamp(28px,6vw,76px)] leading-[0.95] tracking-[-0.01em] text-[#14181F]">
           <span className="word inline-block">Three</span>{' '}
           <span className="word inline-block">ancient</span>{' '}
           <span className="word inline-block">systems.</span>
         </span>
-        <span className="block text-[clamp(36px,6vw,76px)] leading-[0.95] tracking-[-0.01em] text-[#14181F] mt-2">
+        <span className="block text-[clamp(28px,6vw,76px)] leading-[0.95] tracking-[-0.01em] text-[#14181F] mt-2">
           <span className="word inline-block">One</span>{' '}
           <span className="word inline-block">portrait</span>{' '}
           <span className="word inline-block">of</span>{' '}
@@ -158,17 +164,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onBegin }) => {
         ref={subheadRef}
         className="absolute left-1/2 top-[66%] md:top-[73%] -translate-x-1/2 text-center max-w-[52ch] text-base md:text-lg text-[#6D6A61] px-6"
       >
-        A single, modern reading that fuses Western astrology, BaZi, and WuXing into practical clarity.
+        {heroCopy.subhead}
       </p>
 
       {/* CTA Button */}
       <button
+        type="button"
         ref={ctaRef}
         onClick={onBegin}
-        className="absolute left-1/2 top-[78%] md:top-[84%] -translate-x-1/2 group flex items-center gap-2 px-8 py-3 bg-[#053B3F] text-[#F4EFE6] rounded-sm font-medium text-sm tracking-wide hover:bg-[#0A4A4E] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+        className="absolute left-1/2 top-[78%] md:top-[84%] -translate-x-1/2 group flex items-center gap-2 px-8 py-3 bg-[#053B3F] text-[#F4EFE6] rounded-sm font-medium text-sm tracking-wide hover:bg-[#0A4A4E] transition-[background-color,transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-lg"
       >
-        Begin Reading
-        <ChevronDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
+        {heroCopy.cta}
+        <ChevronDown aria-hidden="true" className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
       </button>
     </section>
   );
