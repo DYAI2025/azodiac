@@ -55,6 +55,14 @@ Install requires BOTH npm and Homebrew: `npm install -g claude-flow@alpha` + `br
 - Linux PC Berlin: `dyai@100.103.64.33`
 - EvermemOS: `/home/dyai/EverMemOS` (MongoDB port 27017)
 
+## RTK Proxy
+
+Dev CLI calls (`git`, `npm`, etc.) are auto-rewritten through `rtk` by a Claude Code hook for token savings. To bypass filtering (e.g., when debugging raw output), use `rtk proxy <cmd>`. Meta commands like `rtk gain` and `rtk discover` must always be called directly. See `~/.claude/RTK.md`.
+
+## Process Hygiene
+
+MCP servers (claude-mem, chroma-mcp) spawn orphan processes that don't clean up on session exit and accumulate as zombies. Run `/claude-process-manager` to audit and clean up across machines.
+
 ## Project-Specific Instructions
 
 When working in a specific project, check for that project's own CLAUDE.md file which will contain project-specific build commands, architecture, and conventions.

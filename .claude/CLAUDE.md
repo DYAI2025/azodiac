@@ -93,3 +93,5 @@
 See `~/.claude/commands/decision-maker.md` for detailed framework and examples.
 
 @RTK.md
+
+@/Users/benjaminpoersch/claude/browser-harness/SKILL.md

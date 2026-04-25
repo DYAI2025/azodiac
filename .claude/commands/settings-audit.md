@@ -25,7 +25,7 @@ Validate the Claude Code settings.json for integrity: dead hooks, missing plugin
    - Extract file path from `command` field
    - Check if the file/binary exists:
      ```bash
-     test -x "<path>" && echo "OK" || echo "MISSING: <path>"
+     test -x "{path}" && echo "OK" || echo "MISSING: {path}"
      ```
    - For `npx` commands: check if the package resolves
    - Flag: missing files, non-executable scripts, broken paths
