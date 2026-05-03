@@ -1,13 +1,515 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Augmented Ops</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Augmented_Ops - Hauptagentur Dashboard</title>
+    <meta name="description" content="Augmented Ops - AI Agentur für Startups. VSA, CSA, RSA, MSA - 100% Automated Services.">
+    <meta property="og:title" content="Augmented_Ops | AI Agentur für Startups">
+    <meta property="og:description" content="Autonome KI-Agenturen (VSA, CSA, RSA, MSA) für Startups. Kein Output ohne Signatur.">
+    <meta property="og:type" content="website">
+    <meta name="robots" content="index, follow">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Augmented_Ops",
+      "url": "https://augmented-ops.com",
+      "logo": "https://augmented-ops.com/logo.png",
+      "founder": {
+        "@type": "Person",
+        "name": "Benjamin Poersch"
+      },
+      "description": "100% Automated AI Services. Built by the mesh. Approved by the human.",
+      "subOrganization": [
+        { "@type": "Organization", "name": "Virtual Service Agency (VSA)" },
+        { "@type": "Organization", "name": "Customer Support Agency (CSA)" },
+        { "@type": "Organization", "name": "Recruitment Service Agency (RSA)" },
+        { "@type": "Organization", "name": "Marketing Service Agency (MSA)" }
+      ]
+    }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Navy-Trust Core */
+            --ao-navy-900: #0B1437;
+            --ao-navy-800: #13205C;
+            --ao-navy-700: #1A237E;
+            --ao-navy-600: #3949AB;
+            --ao-navy-500: #5C6BC0;
+            --ao-navy-tint: #EEF0FB;
 
+            --ao-ink: #0F172A;
+            --ao-slate-700: #334155;
+            --ao-slate-500: #64748B;
+            --ao-slate-400: #94A3B8;
+            --ao-slate-200: #E2E8F0;
+            --ao-slate-100: #F1F5F9;
+            --ao-slate-50: #F8FAFC;
+            --ao-white: #FFFFFF;
+
+            --ao-success: #059669;
+            --ao-warn: #D97706;
+            --ao-danger: #DC2626;
+
+            /* Ops-Neon / Holding Defaults */
+            --ao-black: #000000;
+            --ao-dark: #0D0D0D;
+            --ao-neon-blue: #00F0FF;
+            --ao-neon-green: #39FF14;
+
+            /* Typography */
+            --ao-font-ui: "Inter", system-ui, sans-serif;
+            --ao-font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+            /* Motion */
+            --ao-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body {
+            font-family: var(--ao-font-ui);
+            margin: 0;
+            padding: 0;
+            background-color: var(--ao-dark);
+            color: var(--ao-slate-50);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            margin-bottom: 16px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--ao-white);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            font-weight: 300;
+            color: var(--ao-slate-400);
+            max-width: 800px;
+            margin: 0 auto 16px;
+        }
+
+        .header .claim {
+            font-family: var(--ao-font-mono);
+            font-size: 0.9em;
+            color: var(--ao-slate-200);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .company-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .company-card {
+            background: var(--ao-ink);
+            border: 1px solid var(--ao-slate-700);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s var(--ao-ease-out), border-color 0.3s var(--ao-ease-out), box-shadow 0.3s var(--ao-ease-out);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .company-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Hover Accents */
+        .card-vsa:hover { border-color: var(--ao-navy-500); }
+        .card-csa:hover { border-color: var(--ao-neon-green); }
+        .card-rsa:hover { border-color: var(--ao-warn); }
+        .card-msa:hover { border-color: var(--ao-neon-blue); }
+
+        .company-header {
+            padding: 32px 32px 24px 32px;
+            border-bottom: 1px solid var(--ao-slate-700);
+            position: relative;
+        }
+
+        /* Top Accent Bars */
+        .card-vsa .company-header::before { background: var(--ao-navy-500); }
+        .card-csa .company-header::before { background: var(--ao-neon-green); }
+        .card-rsa .company-header::before { background: var(--ao-warn); }
+        .card-msa .company-header::before { background: var(--ao-neon-blue); }
+
+        .company-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .company-header h2 {
+            font-size: 2.2em;
+            margin: 0 0 8px 0;
+            font-weight: 800;
+            color: var(--ao-white);
+            letter-spacing: -0.02em;
+        }
+
+        .company-header p {
+            font-size: 1em;
+            margin: 0;
+            color: var(--ao-slate-400);
+            font-family: var(--ao-font-mono);
+        }
+
+        .company-body {
+            padding: 32px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .company-body h3 {
+            color: var(--ao-slate-200);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-top: 0;
+            margin-bottom: 24px;
+            font-family: var(--ao-font-mono);
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .metric {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--ao-slate-700);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-family: var(--ao-font-mono);
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        /* Metric Value Accents */
+        .card-vsa .metric-value { color: var(--ao-navy-500); }
+        .card-csa .metric-value { color: var(--ao-neon-green); }
+        .card-rsa .metric-value { color: var(--ao-warn); }
+        .card-msa .metric-value { color: var(--ao-neon-blue); }
+
+        .metric-label {
+            font-size: 0.8em;
+            color: var(--ao-slate-400);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .services {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 32px 0;
+            flex-grow: 1;
+        }
+
+        .services li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: var(--ao-slate-200);
+            font-size: 0.95em;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .services li:last-child {
+            border-bottom: none;
+        }
+
+        .services li strong {
+            color: var(--ao-white);
+            margin-right: 8px;
+            font-weight: 600;
+        }
+
+        .investment-deck {
+            text-align: center;
+            margin-top: auto;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .investment-deck a {
+            display: block;
+            padding: 14px 24px;
+            background: var(--ao-navy-700);
+            color: var(--ao-white);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1em;
+            border-radius: 9999px;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .investment-deck a:hover {
+            background: var(--ao-navy-800);
+            transform: translateY(-1px);
+        }
+
+        .investment-deck small {
+            display: block;
+            margin-top: 12px;
+            color: var(--ao-slate-500);
+            font-family: var(--ao-font-mono);
+            font-size: 0.75em;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid var(--ao-slate-700);
+            margin-top: 60px;
+            font-family: var(--ao-font-mono);
+            font-size: 0.85em;
+            color: var(--ao-slate-400);
+        }
+
+        .footer-trust {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-trust span {
+            background: rgba(255,255,255,0.05);
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
+
+        .footer p {
+            margin: 8px 0;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.5em; }
+            .company-grid { grid-template-columns: 1fr; }
+            .company-header h2 { font-size: 1.8em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Augmented_Ops</h1>
+            <p>100% Automated AI Services</p>
+            <div class="claim">Built by the mesh. Approved by the human.</div>
+        </div>
+
+        <div class="company-grid">
+            <!-- VSA Card -->
+            <div class="company-card card-vsa">
+                <div class="company-header">
+                    <h2>VSA</h2>
+                    <p>Virtual Service Agency</p>
+                </div>
+                <div class="company-body">
+                    <h3>Key Metrics</h3>
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="metric-value">€120</div>
+                            <div class="metric-label">CAC Avg</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">10+</div>
+                            <div class="metric-label">Leads/Mo</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">8.5%</div>
+                            <div class="metric-label">Conv. Rate</div>
+                        </div>
+                    </div>
+
+                    <h3>Services</h3>
+                    <ul class="services">
+                        <li><strong>Scouting:</strong> Automated prospecting & qualification</li>
+                        <li><strong>Outreach:</strong> Multi-channel investor engagement</li>
+                        <li><strong>Atelier:</strong> Pitchdeck generation & refinement</li>
+                        <li><strong>Auditing:</strong> Confidence checks & data validation</li>
+                    </ul>
+
+                    <div class="investment-deck">
+                        <a href="https://vsa-production-13b7.up.railway.app" title="Virtual Service Agency (VSA) - Pitchdecks">Deck anfragen</a>
+                        <small>System: VSA_MESH_ONLINE</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CSA Card -->
+            <div class="company-card card-csa">
+                <div class="company-header">
+                    <h2>CSA</h2>
+                    <p>Customer Support Agency</p>
+                </div>
+                <div class="company-body">
+                    <h3>Key Metrics</h3>
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="metric-value">€50</div>
+                            <div class="metric-label">Per Ticket</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">5k</div>
+                            <div class="metric-label">Tickets/Mo</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">90%</div>
+                            <div class="metric-label">Satisfaction</div>
+                        </div>
+                    </div>
+
+                    <h3>Services</h3>
+                    <ul class="services">
+                        <li><strong>Triage:</strong> Intelligent ticket classification</li>
+                        <li><strong>Resolver:</strong> Automated issue resolution</li>
+                        <li><strong>Knowledge:</strong> Dynamic helpcenter updates</li>
+                        <li><strong>Escalation:</strong> Seamless human handoffs</li>
+                    </ul>
+
+                    <div class="investment-deck">
+                        <a href="https://csa-production-29e6.up.railway.app" title="Customer Support Agency (CSA) - AI Support">Support automatisieren</a>
+                        <small>System: CSA_MESH_ONLINE</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RSA Card -->
+            <div class="company-card card-rsa">
+                <div class="company-header">
+                    <h2>RSA</h2>
+                    <p>Recruitment Service Agency</p>
+                </div>
+                <div class="company-body">
+                    <h3>Key Metrics</h3>
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="metric-value">87</div>
+                            <div class="metric-label">Fit Score</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">100</div>
+                            <div class="metric-label">Cands/Mo</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">83%</div>
+                            <div class="metric-label">Accuracy</div>
+                        </div>
+                    </div>
+
+                    <h3>Services</h3>
+                    <ul class="services">
+                        <li><strong>Sourcer:</strong> Automated candidate discovery</li>
+                        <li><strong>Screener:</strong> Resume parsing & qualification</li>
+                        <li><strong>Interviewer:</strong> Initial AI-driven assessments</li>
+                        <li><strong>Bias Auditor:</strong> Fairness & diversity checks</li>
+                    </ul>
+
+                    <div class="investment-deck">
+                        <a href="https://rsa-production-5907.up.railway.app" title="Recruitment Service Agency (RSA) - AI Recruiting">Vakanz öffnen</a>
+                        <small>System: RSA_MESH_ONLINE</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MSA Card -->
+            <div class="company-card card-msa">
+                <div class="company-header">
+                    <h2>MSA</h2>
+                    <p>Marketing Service Agency</p>
+                </div>
+                <div class="company-body">
+                    <h3>Key Metrics</h3>
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="metric-value">8.5%</div>
+                            <div class="metric-label">CTR Avg</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">12%</div>
+                            <div class="metric-label">Conv. Rate</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">€50</div>
+                            <div class="metric-label">CAC Avg</div>
+                        </div>
+                    </div>
+
+                    <h3>Services</h3>
+                    <ul class="services">
+                        <li><strong>Strategist:</strong> Positioning & campaign logic</li>
+                        <li><strong>Copywriter:</strong> Ads, LPs & email sequences</li>
+                        <li><strong>Media:</strong> Channel planning & allocation</li>
+                        <li><strong>Analyst:</strong> Performance & attribution</li>
+                    </ul>
+
+                    <div class="investment-deck">
+                        <a href="https://msa-production-6195.up.railway.app" title="Marketing Service Agency (MSA) - AI Campaigns">Kampagne starten</a>
+                        <small>System: MSA_MESH_ONLINE</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-trust">
+                <span>Kein Output ohne Signatur</span>
+                <span>Jede Zahl hat eine Quelle</span>
+                <span>Human-in-the-loop bei jedem Checkpoint</span>
+            </div>
+            <p>CEO: Benjamin Poersch | Augmented_Ops Holding</p>
+            <p>100% Automated Services | DSGVO Compliant | Art. 22 DSGVO</p>
+        </div>
+    </div>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "Was ist Augmented_Ops?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Augmented_Ops ist ein Mesh autonomer KI-Agenten, die spezialisierte Dienstleistungen in den Bereichen Marketing (MSA), Support (CSA), Recruiting (RSA) und Investment (VSA) zu 100% automatisiert abbilden. Human-in-the-loop bei jedem Checkpoint."
+        }
+      }]
+    }
+    </script>
+</body>
+</html>
