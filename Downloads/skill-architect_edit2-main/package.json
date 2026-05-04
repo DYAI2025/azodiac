@@ -1,0 +1,17 @@
+{
+  "name": "skill-architect_edit2-main",
+  "version": "1.0.0",
+  "description": "`skill-architect_edit2` is an architecture-editor generator for LLM-driven engineering workflows. It turns architecture JSON into a single-file interactive HTML application that supports:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:editor": "playwright test tests/editor-render.spec.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1"
+  }
+}
