@@ -1,4 +1,40 @@
-- Add to memory always
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+> Auto-memory rule: save any new non-obvious fact learned during a session to `projects/-Users-benjaminpoersch/memory/`.
+
+## .claude Directory Architecture
+
+This is the global Claude Code configuration directory (`~/.claude`). Key structure:
+
+| Path | Purpose |
+|------|---------|
+| `commands/*.md` | Slash commands (invokable as `/command-name`) |
+| `skills-unified/<name>/SKILL.md` | Skill definitions (1060+); `skills/` is a symlink to `skills-unified/` |
+| `hooks/` | Hook scripts: `rtk-rewrite.sh`, `caveman-activate.js`, TTS hooks, `unsevered-memory/` |
+| `settings.json` | Global permissions, hooks, env vars, model, theme |
+| `projects/<encoded-path>/memory/` | Auto-memory per working directory; index is `MEMORY.md` |
+| `agents/` | Agent definition files organized by category |
+
+**Adding commands:** create `commands/<name>.md` (flat file, no subdirectory needed).  
+**Adding skills:** create `skills-unified/<name>/SKILL.md`.  
+**Editing hooks:** modify `hooks/*.sh|.js`, then verify the hook entry exists in `settings.json`.
+
+### Active Hooks (settings.json)
+
+- `PreToolUse:Bash` → `rtk-rewrite.sh` (rewrites git/npm/etc to `rtk` proxy) + `dippy`
+- `PreToolUse:Write|Edit|MultiEdit` → `claude-flow hooks pre-edit`
+- `PostToolUse:Write|Edit|MultiEdit` → `claude-flow hooks post-edit`
+- `PostToolUse:Bash` → buddy post-tool-handler (async, timeout 3s)
+- `SessionStart` → agent-deck, `unsevered-memory/memory-load.sh`, `caveman-activate.js`
+- `SessionEnd` → agent-deck, `unsevered-memory/memory-save.sh`
+- `Notification` → `tts-interrupt-hook.sh`
+- `PreCompact` → `unsevered-memory/memory-precompact.sh`
+
+### Session Retention
+
+`cleanupPeriodDays` is **not set** in `settings.json` — sessions expire after 30 days by default. To extend: add `"cleanupPeriodDays": 99999` to `settings.json`.
 
 ## Multi-Agent Coordination Patterns
 
