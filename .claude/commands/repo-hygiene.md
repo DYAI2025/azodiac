@@ -1,0 +1,91 @@
+---
+description: Post-merge repo hygiene — delete merged branches + intelligently review and drop old stashes
+allowed-tools: Bash, AskUserQuestion
+---
+
+## Context
+
+After a sprint or feature wraps up, the local repo accumulates:
+- Merged feature branches that are no longer needed locally (often 30-60+ in a busy project)
+- Stashes from interrupted work, rebase backups, or "stash before switching branches" preflight steps
+
+The user wants a systematic cleanup that:
+1. Bulk-deletes branches that are safely merged into main
+2. Reviews stashes BEFORE dropping, so anything still containing real code (not just plan docs or homunculus logs) is surfaced to the user for an individual decision
+
+This is NOT a single destructive command — the workflow is two-pass: obvious-trash first, mixed-content surfaced for review.
+
+## Your Task
+
+Run a careful post-merge cleanup of the current repo. Never destroy work without surfacing it first.
+
+### Steps
+
+1. **Check current state**
+   ```bash
+   git branch --show-current
+   git branch --merged main | grep -v "^\*\|^  main$" | head -30
+   git stash list
+   ```
+   Report counts: `N branches merged into main`, `M stashes`. If both are zero, you're done.
+
+2. **Bulk-delete merged branches** (the easy half)
+   - Only delete branches where `git branch --merged main` confirms they are fully reachable from main.
+   - Use `git branch -d <name>` (lowercase, safe) — NEVER `-D` (force).
+   - Skip the current branch and `main` itself.
+   - One command:
+     ```bash
+     git branch --merged main | grep -v "^\*\|^  main$\|^  master$" | xargs -n1 git branch -d
+     ```
+   - Report: `X branches deleted, Y branches still present (unmerged or current)`.
+
+3. **Stash triage** — categorize each stash by content type before deciding
+   For each stash in `git stash list`, run:
+   ```bash
+   git stash show -p stash@{N} 2>&1 | head -60
+   ```
+   And classify into:
+   - **Safe-drop category** (no user confirmation needed per-item):
+     - Pure plan-doc additions (e.g., `docs/plans/*.md`, MASTER-PROMPTS edits, sprint plan markdown)
+     - Pure homunculus / observation log changes (`.claude/homunculus/observations.jsonl`)
+     - WIP-commit-message-only stashes already represented in main's git log
+   - **Surface-for-decision category** (ASK before drop):
+     - Contains code in `src/`, `server/`, `apps/`, `packages/`, `scripts/`, or any production path
+     - Contains schema/migration files
+     - Contains DEC/REQ/GOAL artifacts not already in main
+
+4. **Drop the safe-drop category in one batch**
+   - Report which stashes are being dropped and why (one line each).
+   - Run `git stash drop stash@{N}` for each, **from highest index downwards** (because dropping reindexes the lower numbers).
+
+5. **Surface the decision-category stashes one at a time**
+   For each:
+   - Show the diff vs main (the actual content not in main, not the whole stash diff).
+   - Verify: `git diff stash@{N}^! -- <key-file>` or compare against main.
+   - Present a concise recommendation:
+     - "Stash@{N} contains: X, Y, Z. Of these, X is in main, Y is NOT. Drop / apply Y as fresh commit / leave alone?"
+   - Use AskUserQuestion to get a per-stash decision.
+
+6. **Final summary**
+   - Branches deleted (count + names if reasonable to list)
+   - Stashes dropped (with category: safe-drop vs user-approved)
+   - Any stashes left in place (with reason)
+   - Documented in the conversation: any recoverable code that was dropped, so the user has a record if they ever want to re-apply it
+
+### Guardrails
+
+- **Never `-D` force-delete branches.** If a branch shows up under `git branch --no-merged main`, do NOT touch it without explicit user approval.
+- **Never `git stash drop` without inspection.** Even if a stash looks small, run `git stash show -p` first. Plan docs are safe; code is not.
+- **Highest-index-first when dropping multiple stashes.** Dropping `stash@{0}` reindexes the others. If you have a list `[0, 1, 2]` to drop, go `2 → 1 → 0` or use `git stash clear` only when ALL stashes are confirmed disposable.
+- **Show the user recoverable code in the conversation transcript** when dropping mixed-content stashes — the conversation is the only place that record lives after `git stash drop`.
+- **Never run `git gc --aggressive` or `git reflog expire` without explicit user request.** They permanently destroy recovery options.
+- **Respect the "single-word confirmations are complete instructions" project convention** — if the user says "ja" / "yes" / "proceed", act; don't ask again.
+
+### Anti-patterns to avoid
+
+- Running `git stash clear` because "the user said drop them all" — always one-at-a-time, with content shown.
+- Bulk-deleting branches with `git branch -D` because `-d` complained — that complaint means the branch has unmerged commits; investigate, don't force.
+- Treating a stash as drop-safe just because it's old — content matters, not age.
+
+---
+*Generated by /reflect-skills from 3 user prompts in one session ("lokale cleanups durchführen", "bulk cleanup the rest", "stashes durchgehen und alte droppen"). The pattern was clear and the workflow ran end-to-end successfully — but several stashes contained real code that would have been destroyed without the inspection step. This skill codifies the inspection-first approach.*

@@ -1,0 +1,131 @@
+---
+description: Audit FastAPI endpoints for response-model field-strip bugs — keys returned from the handler that aren't declared in the response_model Pydantic class are silently dropped.
+allowed-tools: Read, Bash, Grep
+---
+
+## Context
+
+FastAPI endpoints declared with `response_model=SomeModel` filter
+the handler's return value through the Pydantic model. **Keys
+present in the handler's dict but absent from the model are
+silently stripped from the response body** — no warning, no error,
+no log line. The handler "works", tests assert keys-that-are-there,
+and the missing fields are invisible until a consumer notices.
+
+The canonical failure looks like:
+
+```python
+class ChartResponse(BaseModel):
+    pillars: dict
+    day_master: str
+    # ⚠ no time_standard_requested field
+
+@router.post("/chart", response_model=ChartResponse)
+def chart_endpoint(req: ChartRequest):
+    return {
+        "pillars": …,
+        "day_master": …,
+        "time_standard_requested": req.standard,   # ← silently dropped
+    }
+```
+
+A test that asserts `body["time_standard_requested"]` raises
+`KeyError`. A test that doesn't assert it never notices.
+
+Real example from a FuFirE session that motivated this skill: an
+endpoint enhancement added `time_standard_requested` and
+`time_standard_used` to the `bazi_section` dict on `/chart`. The
+new test failed with `KeyError`. Cause: the corresponding Pydantic
+class `BaziSection` didn't declare the fields. Fix required edits
+to BOTH sites. Without the failing test, the fields would have
+been silently absent from the JSON response.
+
+## Your Task
+
+Audit one router file (or all of `bazi_engine/routers/*.py` /
+`routers/*.py` / `app/api/*.py` etc.) for handler-dict keys that
+aren't declared in the matching `response_model`. Report findings;
+do not auto-fix.
+
+### Steps
+
+1. **Find endpoint decorators with response_model.** Grep for:
+   ```bash
+   grep -nE '@router\.(get|post|put|patch|delete)\([^)]*response_model\s*=' "$FILE"
+   ```
+   For each hit, extract:
+   - The decorator's `path` argument
+   - The `response_model=` class name
+   - The associated handler function
+
+2. **For each handler, find its return value.** Read the function
+   body. The terminal `return` will usually be `return {…}` or
+   `return some_dict_var`. Capture the keys at the top level of
+   that dict.
+
+   Track nested dicts too — if the handler returns
+   `{"bazi": bazi_section, …}` and `bazi_section` is built earlier
+   as a dict literal, capture `bazi_section`'s keys against the
+   corresponding nested Pydantic model.
+
+3. **Find the matching Pydantic model class.** Grep the same file
+   (and imports) for the `class <ModelName>(BaseModel):` definition.
+   Capture its declared fields (left-hand side of each `field:
+   type = …` line). Recurse for nested model references in the
+   field types.
+
+4. **Diff handler-dict-keys vs model-fields.**
+   For each handler:
+   - `extra_in_handler = handler_keys - model_fields`
+     → these keys will be silently stripped. **High-confidence
+     finding.**
+   - `extra_in_model = model_fields - handler_keys`
+     → these are model fields the handler doesn't populate. Some
+     are optional (default None) and OK; others would be `null` in
+     responses. **Lower confidence**, but worth flagging.
+
+5. **Report.** Per file, list endpoints with mismatches:
+
+   ```
+   PYDANTIC RESPONSE SHAPE AUDIT — bazi_engine/routers/chart.py
+   
+   /chart  →  ChartResponse
+     🔴 dict→model strip risk:
+         - bazi_section["time_standard_requested"]  not in BaziSection
+         - bazi_section["time_standard_used"]       not in BaziSection
+     🟡 model field never populated by handler:
+         - ChartResponse.validation  (would emit `null` for every response)
+   
+   /api/profile/{user_id}/chart  →  ProfileChartResponse
+     ✅ all keys declared
+   ```
+
+### Guardrails
+
+- **Read-only.** No auto-fixes — both edits (handler dict + model
+  class) involve nontrivial naming decisions the user owns.
+- **Optional-field detection.** If a model field is declared
+  `Optional[X] = None`, "missing from handler" is acceptable —
+  responses will just have `null`. Lower the severity for those.
+- **Recurse one level into nested models.** A field declared
+  `bazi: BaziSection` in `ChartResponse` should be expanded to
+  also check the keys of the handler's `bazi_section` dict against
+  `BaziSection`. Beyond one nested level, manual review is more
+  efficient than chasing arbitrary depth.
+- **Handler dicts built incrementally** (e.g. `d = {…}; d["x"] = …`)
+  are harder to statically analyze. If the function-body scan can't
+  enumerate keys with confidence, report
+  `cannot-statically-determine` rather than guessing.
+- **Skip handlers without `response_model=`** — FastAPI doesn't
+  shape those, so the dict-vs-model mismatch can't manifest. They
+  may have other quality issues (no response typing at all) but
+  that's a different audit.
+
+---
+
+*Generated by /reflect-skills from session pattern: an endpoint
+enhancement added fields to a handler's return dict but not to the
+`response_model` Pydantic class. The fields were silently stripped
+from the response. Only caught because the new test asserted on
+the missing keys and raised `KeyError`. Without that test, the
+contract gap would have shipped invisibly.*
