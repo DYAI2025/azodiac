@@ -133,7 +133,13 @@ def main():
         results.append({"file": agent["file"], "name": agent.get("name"), "errors": errs})
         all_errors.extend([f"{agent['file']}: {e}" for e in errs])
 
-    print(json.dumps({"results": results, "global_errors": all_errors[:50], "total_errors": len(all_errors)}, indent=2))
+    truncated = len(all_errors) > 50
+    print(json.dumps({
+        "results": results,
+        "global_errors": all_errors[:50],
+        "total_errors": len(all_errors),
+        "truncated": truncated,
+    }, indent=2))
     sys.exit(1 if all_errors else 0)
 
 

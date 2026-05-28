@@ -158,3 +158,20 @@ def test_duplicate_names_fails(tmp_path):
     )
     assert r.returncode == 1
     assert "duplicated" in r.stdout
+
+def test_truncated_errors_flagged_in_output(tmp_path):
+    """When >50 errors exist, output JSON must set truncated:true."""
+    for i in range(60):
+        (tmp_path / f"bad-{i:02d}.md").write_text(
+            f"---\nname: bad-agent-{i:02d}\n---\n# Output contract\n# Failure modes\n"
+        )
+    r = subprocess.run(
+        ["uv", "run", "python3", SCRIPT, str(tmp_path)],
+        capture_output=True, text=True,
+        cwd="/Users/benjaminpoersch/.claude"
+    )
+    assert r.returncode == 1
+    data = json.loads(r.stdout)
+    assert data["total_errors"] > 50
+    assert data["truncated"] is True
+    assert len(data["global_errors"]) == 50  # still capped at 50
