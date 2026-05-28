@@ -17,7 +17,7 @@ ALLOWED_COLORS = {
     "red", "orange", "yellow", "green", "blue", "purple",
     "pink", "cyan", "white", "black", None,
 }
-KEBAB_RE = re.compile(r"^[a-z][a-z0-9\-]+$")
+KEBAB_RE = re.compile(r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$")
 REQUIRED_BODY_SECTIONS = ["Output contract", "Failure modes"]
 
 

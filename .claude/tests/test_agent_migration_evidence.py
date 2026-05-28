@@ -36,7 +36,7 @@ def test_writes_valid_json_ledger(tmp_path):
     assert len(entries) == 1
     data = json.loads(entries[0].read_text())
     assert data["candidate"] == "evidence-collector"
-    assert data["status"] in {"generated", "validated", "needs_review"}
+    assert data["status"] in {"validated", "needs_review"}
 
 
 def test_ledger_contains_required_fields(tmp_path):
