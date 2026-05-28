@@ -8,3 +8,20 @@
 .claude/*
 !.claude/commands/
 !.claude/commands/*.md
+
+# Agent migration pipeline
+!.claude/scripts/
+!.claude/scripts/*.py
+!.claude/tests/
+!.claude/tests/*.py
+!.claude/agents-src/
+!.claude/agents-src/agency-normalized/
+!.claude/agents-src/agency-normalized/*.md
+!.claude/docs/
+!.claude/docs/plans/
+!.claude/docs/plans/*.md
+!.claude/docs/agent-migration/
+!.claude/docs/agent-migration/*.yaml
+!.claude/docs/agent-migration/*.md
+!.claude/docs/agent-migration/evidence-ledger/
+!.claude/docs/agent-migration/evidence-ledger/*.json
