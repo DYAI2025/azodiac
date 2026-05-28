@@ -2,6 +2,7 @@
 """Write a per-candidate evidence ledger entry for agent migration."""
 import argparse
 import json
+import os
 import pathlib
 import subprocess
 import sys
@@ -45,10 +46,15 @@ def write_ledger(args) -> pathlib.Path:
     checks = run_validator(args.validator, args.target_file)
     status = "validated" if checks["frontmatter_schema"] == "pass" else "needs_review"
 
+    try:
+        target_file_stored = str(pathlib.Path(args.target_file).resolve().relative_to(pathlib.Path.cwd()))
+    except ValueError:
+        target_file_stored = os.path.relpath(args.target_file)
+
     entry = {
         "candidate": args.candidate,
         "source": args.source,
-        "target_file": args.target_file,
+        "target_file": target_file_stored,
         "status": status,
         "checks": {
             "frontmatter_schema": checks["frontmatter_schema"],

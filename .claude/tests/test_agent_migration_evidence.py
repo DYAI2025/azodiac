@@ -121,3 +121,24 @@ def test_ledger_fails_when_validator_result_unmatched(tmp_path):
     assert data["checks"]["frontmatter_schema"] == "fail"
     assert any("no result matched" in str(risk) or "validator ran but" in str(risk)
                for risk in data["risks"]), f"Expected unmatched-path error in risks, got: {data['risks']}"
+
+
+def test_ledger_stores_relative_target_path(tmp_path):
+    """target_file in ledger must be relative even when --target-file is an absolute path."""
+    agent_file = tmp_path / "abs-agent.md"
+    agent_file.write_text(VALID_AGENT_BODY.format(name="abs-agent"))
+    ledger_dir = tmp_path / "ledger"
+    r = subprocess.run(
+        ["uv", "run", "python3", SCRIPT,
+         "--candidate", "abs-agent",
+         "--source", "agency-agents",
+         "--target-file", str(agent_file.resolve()),   # <-- absolute path
+         "--validator", "scripts/validate-claude-agents.py",
+         "--ledger-dir", str(ledger_dir)],
+        capture_output=True, text=True,
+        cwd="/Users/benjaminpoersch/.claude"
+    )
+    assert r.returncode == 0, r.stderr
+    data = json.loads(list(ledger_dir.glob("*.json"))[0].read_text())
+    stored = data["target_file"]
+    assert not pathlib.Path(stored).is_absolute(), f"Expected relative path, got: {stored}"
