@@ -82,3 +82,29 @@ def test_no_secrets_in_output(tmp_path):
     body = outfile.read_text()
     assert "ghp_supersecret" not in body
     assert "supersecret" not in body
+
+
+import importlib.util
+
+
+def _load_compile():
+    spec = importlib.util.spec_from_file_location(
+        "compile_agency_agent",
+        pathlib.Path("/Users/benjaminpoersch/.claude/scripts/compile-agency-agent.py")
+    )
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_is_blocked_output_blocks_absolute_agents_path():
+    mod = _load_compile()
+    # Must block these
+    assert mod.is_blocked_output(pathlib.Path("/some/project/agents"))
+    assert mod.is_blocked_output(pathlib.Path("/some/project/agents/core"))
+    assert mod.is_blocked_output(pathlib.Path("agents/core"))
+    assert mod.is_blocked_output(pathlib.Path("agents"))
+    # Must NOT block these safe paths
+    assert not mod.is_blocked_output(pathlib.Path("agents-src/agency-normalized"))
+    assert not mod.is_blocked_output(pathlib.Path("/home/user/agents-src/agency-normalized"))
+    assert not mod.is_blocked_output(pathlib.Path("agents-src/agency-normalized/subdir"))

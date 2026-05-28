@@ -81,21 +81,29 @@ def scrub_secrets(text: str) -> str:
 
 
 def is_blocked_output(out_dir: pathlib.Path) -> bool:
-    """Block writes that resolve into the live agents/ directory."""
+    """Block writes that resolve into the live agents/ directory.
+
+    Safe: any path containing 'agents-src' or 'agency-normalized'.
+    Blocked: paths where 'agents' is a standalone directory component.
+    """
+    def _is_safe(s: str) -> bool:
+        return "agents-src" in s or "agency-normalized" in s
+
+    # Check resolved absolute path
     try:
-        resolved = out_dir.resolve()
+        resolved = str(out_dir.resolve()).replace("\\", "/")
+        if _is_safe(resolved):
+            return False
+        if "/agents/" in resolved or resolved.endswith("/agents"):
+            return True
     except Exception:
-        resolved = out_dir
-    parts = resolved.parts
-    for i, part in enumerate(parts):
-        if part == "agents" and "agency-normalized" not in parts and "agents-src" not in parts:
-            return True
-    # String-based check for relative paths like "agents/core"
-    s = str(out_dir).replace("\\", "/")
-    if re.match(r"^agents/", s) or "/agents/" in s:
-        if "agency-normalized" not in s and "agents-src" not in s:
-            return True
-    return False
+        pass
+
+    # Check raw string (handles relative paths like "agents/core" or bare "agents")
+    raw = str(out_dir).replace("\\", "/")
+    if _is_safe(raw):
+        return False
+    return bool(re.match(r"^agents(/|$)", raw) or "/agents/" in raw or raw.endswith("/agents"))
 
 
 def compile_agent(source_path: pathlib.Path, candidate: str, out_dir: pathlib.Path) -> pathlib.Path:
