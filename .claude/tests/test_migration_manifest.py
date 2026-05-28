@@ -2,7 +2,7 @@
 import pathlib
 import yaml
 
-MANIFEST = pathlib.Path("docs/agent-migration/curated-agents.yaml")
+MANIFEST = pathlib.Path(__file__).parent.parent / "docs/agent-migration/curated-agents.yaml"
 
 
 def test_manifest_is_valid_yaml():
