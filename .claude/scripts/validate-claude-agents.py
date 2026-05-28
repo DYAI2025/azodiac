@@ -25,11 +25,11 @@ def parse_agent(path: pathlib.Path) -> dict:
     text = path.read_text()
     m = FRONTMATTER_RE.match(text)
     if not m:
-        return {"file": str(path), "name": path.stem, "parse_error": "no frontmatter"}
+        return {"file": str(path), "name": path.stem, "parse_error": "no frontmatter", "body": text}
     try:
         fm = yaml.safe_load(m.group(1)) or {}
     except yaml.YAMLError as e:
-        return {"file": str(path), "name": path.stem, "parse_error": str(e)}
+        return {"file": str(path), "name": path.stem, "parse_error": str(e), "body": text}
     return {
         "file": str(path),
         "name": fm.get("name"),
@@ -42,6 +42,7 @@ def parse_agent(path: pathlib.Path) -> dict:
         "color": fm.get("color"),
         "parse_error": None,
         "frontmatter": fm,
+        "body": text,
     }
 
 
@@ -87,7 +88,7 @@ def validate_agent(entry: dict) -> list:
     if entry.get("color") not in ALLOWED_COLORS:
         errors.append(f"color: '{entry.get('color')}' not in allowed values")
 
-    body = pathlib.Path(entry["file"]).read_text()
+    body = entry.get("body", "")
     for section in REQUIRED_BODY_SECTIONS:
         if section.lower() not in body.lower():
             errors.append(f"body: missing required section '{section}'")
