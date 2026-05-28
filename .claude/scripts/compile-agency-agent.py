@@ -87,7 +87,8 @@ def is_blocked_output(out_dir: pathlib.Path) -> bool:
     Blocked: paths where 'agents' is a standalone directory component.
     """
     def _is_safe(s: str) -> bool:
-        return "agents-src" in s or "agency-normalized" in s
+        return bool(re.search(r"(^|/)agents-src(/|$)", s) or
+                    re.search(r"(^|/)agency-normalized(/|$)", s))
 
     # Check resolved absolute path
     try:
