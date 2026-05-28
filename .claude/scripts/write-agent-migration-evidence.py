@@ -2,10 +2,8 @@
 """Write a per-candidate evidence ledger entry for agent migration."""
 import argparse
 import json
-import os
 import pathlib
 import subprocess
-import sys
 from datetime import date
 
 
@@ -49,7 +47,8 @@ def write_ledger(args) -> pathlib.Path:
     try:
         target_file_stored = str(pathlib.Path(args.target_file).resolve().relative_to(pathlib.Path.cwd()))
     except ValueError:
-        target_file_stored = os.path.relpath(args.target_file)
+        # File is outside project root; store absolute path rather than a ../../ traversal.
+        target_file_stored = str(pathlib.Path(args.target_file).resolve())
 
     entry = {
         "candidate": args.candidate,
