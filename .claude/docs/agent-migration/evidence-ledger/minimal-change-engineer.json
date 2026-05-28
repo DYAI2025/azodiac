@@ -1,0 +1,17 @@
+{
+  "candidate": "minimal-change-engineer",
+  "source": "agency-agents-main",
+  "target_file": "agents-src/agency-normalized/minimal-change-engineer.md",
+  "status": "validated",
+  "checks": {
+    "frontmatter_schema": "pass",
+    "name_collision": "not_checked",
+    "tools_explicit": "pass",
+    "routing_overlap": "not_checked",
+    "hook_schema": "not_applicable",
+    "validator_errors": []
+  },
+  "risks": [],
+  "review_decision": "pending",
+  "created": "2026-05-28"
+}

@@ -17,6 +17,8 @@
 !.claude/agents-src/
 !.claude/agents-src/agency-normalized/
 !.claude/agents-src/agency-normalized/*.md
+!.claude/agents-src/agency-source/
+!.claude/agents-src/agency-source/*.yaml
 !.claude/docs/
 !.claude/docs/plans/
 !.claude/docs/plans/*.md
