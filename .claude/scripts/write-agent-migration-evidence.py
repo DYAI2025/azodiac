@@ -16,14 +16,22 @@ def run_validator(validator: str, target_file: str) -> dict:
     )
     try:
         data = json.loads(r.stdout)
-        target_abs = str(target.resolve())
+        target_abs = target.resolve()
         candidate_results = [
             x for x in data.get("results", [])
-            if pathlib.Path(x.get("file", "")).resolve() == pathlib.Path(target_abs)
+            if pathlib.Path(x.get("file", "")).resolve() == target_abs
         ]
-        errors = candidate_results[0]["errors"] if candidate_results else []
-    except Exception:
-        errors = [r.stderr.strip() or "validator parse error"]
+        if not candidate_results:
+            return {
+                "frontmatter_schema": "fail",
+                "errors": [
+                    f"validator ran but no result matched '{target_file}' "
+                    f"(scanned {len(data.get('results', []))} files)"
+                ],
+            }
+        errors = candidate_results[0]["errors"]
+    except Exception as e:
+        errors = [r.stderr.strip() or f"validator parse error: {e}"]
     return {
         "frontmatter_schema": "pass" if not errors else "fail",
         "errors": errors,
