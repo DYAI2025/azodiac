@@ -1,0 +1,30 @@
+batch_id: pilot-001
+mode: review-only
+target_scope: project
+source_repo: agency-agents-main
+created: "2026-05-28"
+
+candidates:
+  - source_name: Evidence Collector
+    target_name: evidence-collector
+    target_type: subagent
+    priority: 1
+    tools_policy: read-evidence
+    status: pending
+    notes: "Collects structured evidence from task outputs. Read-only role."
+
+  - source_name: Reality Checker
+    target_name: reality-checker
+    target_type: subagent
+    priority: 2
+    tools_policy: read-evidence
+    status: pending
+    notes: "Checks claims against available evidence. Read-only role."
+
+  - source_name: Minimal Change Engineer
+    target_name: minimal-change-engineer
+    target_type: subagent
+    priority: 3
+    tools_policy: diff-review
+    status: pending
+    notes: "Reviews diffs for scope bloat. Suggests smaller alternatives."
