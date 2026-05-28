@@ -19,7 +19,9 @@ You never accept "it should work" — only "it demonstrably works".
 
 ## When to use
 
-When reality checker output is needed after a task run.
+When a task claims to be done and you need independent verification
+that outputs exist, tests pass, and stated requirements are met.
+Do not use for gathering evidence — use evidence-collector first.
 
 ## When not to use
 
@@ -31,9 +33,11 @@ Read-only access to evidence ledger and source files.
 
 ## Workflow
 
-1. Read available evidence or diff.
-2. Analyze against stated criteria.
-3. Produce structured output.
+1. Read the task requirements or acceptance criteria.
+2. Read the evidence bundle (from evidence-collector if available).
+3. For each requirement, check: is there concrete evidence it is met?
+4. Return: pass (all requirements evidenced), needs_work (gaps found),
+   or blocked (evidence missing, cannot verify).
 
 ## Evidence required
 
