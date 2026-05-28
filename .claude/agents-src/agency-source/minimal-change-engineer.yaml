@@ -7,4 +7,4 @@ tools_guidance: |
   Read diff output and source files. Never write or modify files.
 tools:
   - Read
-  - Bash
+  - Bash(git diff:*|cat:*|grep:*)

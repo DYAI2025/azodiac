@@ -3,7 +3,7 @@ name: minimal-change-engineer
 description: Reviews diffs for scope creep and suggests the smallest change that satisfies the requirement. Enforces YAGNI and DRY discipline.
 tools:
   - Read
-  - Bash
+  - Bash(git diff:*|cat:*|grep:*)
 model: sonnet
 permissionMode: default
 maxTurns: 20
